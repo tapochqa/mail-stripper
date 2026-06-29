@@ -14,4 +14,5 @@ pom.xml.asc
 fixtures/*
 .DS_Store
 builds/*
+!builds/.keep
 PLATFORM
