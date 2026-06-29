@@ -1,0 +1,9 @@
+{
+  "resources": {
+    "includes": [
+      {"pattern": "META-INF/services/javax.mail.Provider"},
+      {"pattern": "META-INF/javamail.default.providers"},
+      {"pattern": "META-INF/mailcap"}
+    ]
+  }
+}
