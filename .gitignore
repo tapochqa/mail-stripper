@@ -11,5 +11,7 @@ pom.xml.asc
 /.prepl-port
 .hgignore
 .hg/
-resources/*
+fixtures/*
 .DS_Store
+builds/*
+PLATFORM

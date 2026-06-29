@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [io.forward/clojure-mail "1.0.8"]]
   :main ^:skip-aot mail-stripper.core
+  :uberjar-name "mail-stripper.jar"
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})

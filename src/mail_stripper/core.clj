@@ -68,7 +68,6 @@
 (defn -main
   [s]
   (let
-  
     [{:keys [content encoding raw] :as html-part}
      (->> s
       string->message
@@ -78,13 +77,19 @@
       first)
      
      fixed-html
-     (encode-string (clean-html content) encoding)]
+     (if (some? content)
+       (encode-string (clean-html content) encoding))]
     
-    (spit "resources/out.eml"
-      (str/replace s raw fixed-html))))
+    (if (some? fixed-html)
+      (print (str/replace s raw fixed-html))
+      (print s))))
 
 
 
+(comment
+  
+  (-main (slurp "fixtures/ofd.eml"))
+  )
 
 
 

@@ -27,6 +27,8 @@ JAR = target/uberjar/${NAME}.jar
 
 DATE = $(shell date +%s)
 
+uberjar: 
+	lein uberjar
 
 platform-docker:
 	docker run -it --rm --entrypoint /bin/sh ${NI_TAG} -c 'echo `uname -s`-`uname -m`' > ${PLATFORM}
@@ -38,7 +40,7 @@ platform-local:
 	echo `uname -s`-`uname -m` > ${PLATFORM}
 
 graal-build: platform-local
-	native-image ${NI_ARGS}$(shell cat ${PLATFORM})
+	/Users/admin/Downloads/graalvm-jdk-25.0.3+9.1/Contents/Home/lib/svm/bin/native-image ${NI_ARGS}$(shell cat ${PLATFORM})
 
 build-binary-local: uberjar graal-build
 
