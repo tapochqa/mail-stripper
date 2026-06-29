@@ -1,5 +1,5 @@
 (ns mail-stripper.core
-  (:gen-class)
+  
   (:require [clojure.string :as str]
             [clojure-mail.parser :as parser]
             [clojure-mail.message :as message]
@@ -7,11 +7,11 @@
    (:import (javax.mail Session)
             (javax.mail.internet MimeMessage MimeBodyPart MimeMultipart MimeUtility)
             (java.io ByteArrayInputStream ByteArrayOutputStream)
-            (java.util Properties)))
+            (java.util Properties))
+  (:gen-class))
 
 
 (defn encode-string
-  "Encode a string using quoted-printable or base64"
   [s encoding]
   (let [baos (ByteArrayOutputStream.)
         out (MimeUtility/encode baos encoding)]
@@ -21,14 +21,12 @@
 
 
 (defn string->message
-  "Create a MimeMessage from a string"
   [email-str]
   (let [props (Session/getDefaultInstance (Properties.))]
     (MimeMessage. props (ByteArrayInputStream. (.getBytes email-str "UTF-8")))))
 
 
 (defn clean-html
-  "Your HTML cleaning function"
   [html]
   (-> html
       (str/replace #"<style[\n]*.*?>" "<govno hidden>")
@@ -41,7 +39,6 @@
 
 (defn recursively-parse-message
   [m]
-  
   (let [content
         (try (.getContent m) (catch Exception e nil))
         
@@ -66,9 +63,13 @@
 
 
 (defn -main
-  [s]
+  [& ss]
   (let
-    [{:keys [content encoding raw] :as html-part}
+    [s
+     (slurp *in*)
+     #_(reduce (fn [a b] (str a " " b)) ss)
+     
+     {:keys [content encoding raw] :as html-part}
      (->> s
       string->message
       recursively-parse-message
@@ -81,8 +82,8 @@
        (encode-string (clean-html content) encoding))]
     
     (if (some? fixed-html)
-      (print (str/replace s raw fixed-html))
-      (print s))))
+      (println (str/replace s raw fixed-html))
+      (println s))))
 
 
 

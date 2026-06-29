@@ -9,15 +9,12 @@ NI_ARGS = \
 	--no-server \
 	-jar ${JAR} \
 	-J-Dfile.encoding=UTF-8 \
-	--enable-url-protocols=http,https \
 	-H:+PrintClassInitialization \
 	-H:+ReportExceptionStackTraces \
 	-H:Log=registerResource \
-	--initialize-at-run-time=com.mysql.cj.jdbc.AbandonedConnectionCleanupThread \
-	--initialize-at-run-time=com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.AbandonedConnectionCleanupThread \
-	--initialize-at-run-time=com.mysql.cj.jdbc.Driver \
-	--initialize-at-run-time=com.mysql.cj.jdbc.NonRegisteringDriver \
-	-H:ReflectionConfigurationFiles=reflection-config.json \
+  	-H:ReflectionConfigurationFiles=./reflection-config.json \
+  	-H:ResourceConfigurationFiles=./resource-config.json \
+ 	--initialize-at-build-time=javax.mail,com.sun.mail \
 	-H:Name=./builds/${NAME}-
 
 
@@ -40,7 +37,7 @@ platform-local:
 	echo `uname -s`-`uname -m` > ${PLATFORM}
 
 graal-build: platform-local
-	/Users/admin/Downloads/graalvm-jdk-25.0.3+9.1/Contents/Home/lib/svm/bin/native-image ${NI_ARGS}$(shell cat ${PLATFORM})
+	native-image ${NI_ARGS}$(shell cat ${PLATFORM})
 
 build-binary-local: uberjar graal-build
 
