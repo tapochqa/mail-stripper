@@ -4,7 +4,7 @@
             [clojure-mail.parser :as parser]
             [clojure-mail.message :as message]
             [clojure-mail.core :as clojure-mail])
-   (:import (javax.mail Session)
+  (:import  (javax.mail Session)
             (javax.mail.internet MimeMessage MimeBodyPart MimeMultipart MimeUtility)
             (java.io ByteArrayInputStream ByteArrayOutputStream)
             (java.util Properties))
@@ -31,7 +31,7 @@
   (-> html
       (str/replace #"<style[\n]*.*?>" "<govno hidden>")
       (str/replace #"</style>" "</govno>")
-      (str/replace #"<img[\n]*.*?>" "<govno hidden>")
+      (str/replace #"<img[\n]*.*?>" "<govno>")
       (str/replace #"</img>" "</govno>")
       (str/replace #"color=\"[\n]*.*?\"" "govno=\"\"")
       (str/replace #"style=[\"\']([^\"\']*)[\"\']" "govno=\"\"")))
@@ -77,20 +77,23 @@
       (filter (fn [x] (re-find #"text/html" (:type x))))
       first)
      
+     clean
+     (if (some? content)
+       (clean-html content))
+     
      fixed-html
      (if (some? content)
-       (encode-string (clean-html content) encoding))]
+       (encode-string clean encoding))]
     
     (if (some? fixed-html)
+      #_(spit "fixtures/out.html" clean)
       (println (str/replace s raw fixed-html))
       (println s))))
 
 
-
 (comment
-  
-  (-main (slurp "fixtures/ofd.eml"))
-  )
+  (binding [*in* "fixtures/school.eml"]
+    (-main)))
 
 
 
